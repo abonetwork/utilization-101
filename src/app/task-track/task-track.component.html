@@ -20,12 +20,33 @@
     </button>
     <!-- <a class="prev" href="#previous">&lt; Week 35</a
     > -->
-    <strong class="week"
-      >{{ formatDayWithOrdinals(weekDates[0]) }} -
-      {{ formatDayWithOrdinals(weekDates[4]) }} September 2023
-      <!-- Last friday | Last friday - 2 weeks--><small
-        >Team Tracker</small
-      ></strong
+    <strong class="week">
+      <ng-container
+        *ngIf="
+          getDateConditional(weekDates[0]) < getDateConditional(weekDates[4]);
+          else elseBlock
+        "
+      >
+        {{ formatDayWithOrdinals(weekDates[0]) }} -
+        {{ formatDayWithOrdinals(weekDates[4]) }}
+        {{ weekDates[0] | date: 'MMMM' }}
+        {{ weekDates[4].getFullYear() }}
+      </ng-container>
+      <ng-template #elseBlock>
+        <ng-container
+          *ngIf="
+            getDateConditional(weekDates[0]) > getDateConditional(weekDates[4])
+          "
+        >
+          {{ formatDayWithOrdinals(weekDates[0]) }}
+          {{ weekDates[0] | date: 'MMMM' }} -
+          {{ formatDayWithOrdinals(weekDates[4]) }}
+          {{ weekDates[4] | date: 'MMMM' }}
+          {{ weekDates[4].getFullYear() }}
+        </ng-container>
+      </ng-template>
+
+      <small>Team Tracker</small></strong
     >
     <!-- <a class="next" href="#next">Week 37 &gt;</a> -->
     <button

@@ -12,6 +12,8 @@ export class TaskTrackComponent {
   selectedDate: Date;
   weekDates: Date[] = [];
   currentDate: Date = new Date();
+  previousYear: number = 0;
+  nextYear: number = 0;
   workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
   priority = ['P1', 'P2', 'P3', 'P4'];
   tasks = [
@@ -45,10 +47,30 @@ export class TaskTrackComponent {
     const previousWeekDate = new Date(selectedDate);
     previousWeekDate.setDate(selectedDate.getDate() - 7); // Go back 7 days to get the previous week
     this.previousWeekNumber = this.getWeekNumber(previousWeekDate);
+    this.previousYear = previousWeekDate.getFullYear();
+    console.log('FY previousYear: ', previousWeekDate.getFullYear());
+
     const nextWeekDate = new Date(selectedDate);
     nextWeekDate.setDate(selectedDate.getDate() + 7); // Go forward 7 days to get the next week
     this.nextWeekNumber = this.getWeekNumber(nextWeekDate);
+    this.nextYear = nextWeekDate.getFullYear();
+    console.log('FY nextYear: ', nextWeekDate.getFullYear());
 
+    console.log(
+      this.previousWeekNumber,
+      '>',
+      this.nextWeekNumber,
+      ': ',
+      this.previousWeekNumber > this.nextWeekNumber
+    );
+    if (this.previousWeekNumber > this.nextWeekNumber) {
+      this.nextYear += 1;
+      console.log('nextYear: ', this.nextYear);
+    } else {
+      this.previousYear -= 1;
+
+      console.log('previousYear: ', this.previousYear);
+    }
     // Calculate the date of the Monday of the current week
     const monday = new Date(selectedDate);
     monday.setDate(
@@ -130,9 +152,12 @@ export class TaskTrackComponent {
         this.selectedDate.getFullYear()
       );
     }
-    this.selectedDate = new Date(dateSelected);
 
+    this.selectedDate = new Date(dateSelected);
+    console.log(this.selectedDate);
     this.weekDates = [];
+    this.previousYear = 0;
+    this.nextYear = 0;
     this.generateWeekDates();
   }
 
@@ -140,6 +165,11 @@ export class TaskTrackComponent {
     const januaryFirst = new Date(year, 0, 1);
     const daysToAdd = (week - 1) * 7 + (1 - januaryFirst.getDay()); // 1 is for Monday
     return new Date(year, 0, 1 + daysToAdd);
+  }
+
+  getDateConditional(date: Date): number {
+    console.log('conditional: ', date);
+    return date.getDate();
   }
 }
 
