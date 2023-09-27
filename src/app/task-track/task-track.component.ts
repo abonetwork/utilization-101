@@ -11,7 +11,7 @@ export class TaskTrackComponent {
   nextWeekNumber: number;
   weekDates: Date[] = [];
   currentDate: Date = new Date();
-  weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
   priority = ['P1', 'P2', 'P3', 'P4'];
   tasks = [
     { title: 'Client Training', acronym: 'CT' },
@@ -99,6 +99,10 @@ export class TaskTrackComponent {
       default:
         return 'th';
     }
+  }
+
+  convertDateToLocaleString(date: Date): string {
+    return date.toLocaleDateString();
   }
 }
 

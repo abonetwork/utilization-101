@@ -17,6 +17,8 @@ import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
+
+import { MatGridListModule } from '@angular/material/grid-list';
 @NgModule({
   imports: [
     BrowserModule,
@@ -31,6 +33,7 @@ import { MatCardModule } from '@angular/material/card';
     MatTableModule,
     MatChipsModule,
     MatCardModule,
+    MatGridListModule,
     RouterModule.forRoot([{ path: '', component: TaskTrackComponent }]),
   ],
   declarations: [AppComponent, TopBarComponent, TaskTrackComponent],

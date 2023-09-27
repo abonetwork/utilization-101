@@ -1,19 +1,8 @@
 <header class="header">
-  <strong>formatDateWithOrdinals(currentDate)</strong
+  <strong>{{ formatDateWithOrdinals(currentDate) }}</strong
   ><span>Lito Abon Jr — <a class="logout">Logout</a></span>
 </header>
 <mat-card class="week-view">
-  <div>Week Number for Today: {{ currentWeekNumber }}</div>
-  <div>Week Number for Previous Week: {{ previousWeekNumber }}</div>
-  <div>Week Number for Next Week: {{ nextWeekNumber }}</div>
-
-  <div>
-    Dates from Monday to Friday of the Current Week:
-    <ul>
-      <li *ngFor="let date of weekDates">{{ formatDayWithOrdinals(date) }}</li>
-    </ul>
-  </div>
-
   <!-- Navigation-->
   <header class="meta">
     <button mat-flat-button color="accent">
@@ -22,19 +11,20 @@
         aria-label="navigate back"
         fontIcon="navigate_before"
       ></mat-icon>
-      Week 35
+      Week {{ previousWeekNumber }}
     </button>
     <!-- <a class="prev" href="#previous">&lt; Week 35</a
     > -->
     <strong class="week"
-      >4th - 8th September 2023
+      >{{ formatDayWithOrdinals(weekDates[0]) }} -
+      {{ formatDayWithOrdinals(weekDates[4]) }} September 2023
       <!-- Last friday | Last friday - 2 weeks--><small
-        >Team Tracker 2023</small
+        >Team Tracker</small
       ></strong
     >
     <!-- <a class="next" href="#next">Week 37 &gt;</a> -->
     <button mat-flat-button color="accent">
-      Week 37
+      Week {{ nextWeekNumber }}
       <mat-icon
         iconPositionEnd
         aria-hidden="false"
@@ -49,11 +39,13 @@
       <thead>
         <tr>
           <th class="day"></th>
-          <th class="day">Monday<small>4th</small></th>
-          <th class="day">Tuesday<small>5th</small></th>
-          <th class="day">Wednesday<small>6th</small></th>
-          <th class="day">Thursday<small>7th</small></th>
-          <th class="day cutoff">Friday<small>8th</small></th>
+          <th
+            class="day"
+            *ngFor="let date of weekDates; index as i"
+            [ngClass]="{}"
+          >
+            {{ workingDays[i] }}<small>{{ formatDayWithOrdinals(date) }}</small>
+          </th>
         </tr>
         <!-- Buttons that help do things-->
       </thead>
@@ -73,693 +65,67 @@
         </tr>
       </tfoot>
       <tbody>
-        <tr class="CT">
-          <th>Client Training</th>
-          <td>
-            <mat-form-field class="example-md-width">
+        <tr *ngFor="let task of tasks" class="{{ task.acronym }}">
+          <th>{{ task.title }}</th>
+          <td *ngFor="let date of weekDates">
+            <mat-form-field *ngIf="task.acronym != 'CA'" class="md-width">
               <mat-label>Hrs</mat-label>
               <input
-                id="CT-09252023"
+                id="{{ task.acronym }}-{{ convertDateToLocaleString(date) }}"
                 type="number"
                 matInput
                 max="9"
                 placeholder="0"
             /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input
-                id="CT-09262023"
-                type="number"
-                matInput
-                maxlength="1"
-                placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input
-                id="CT-09272023"
-                type="number"
-                matInput
-                maxlength="1"
-                placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input
-                id="CT-09282023"
-                type="number"
-                matInput
-                maxlength="1"
-                placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input
-                id="CT-09292023"
-                type="number"
-                matInput
-                maxlength="1"
-                placeholder="0"
-            /></mat-form-field>
+
+            <div *ngIf="task.acronym == 'CA'">
+              <mat-grid-list cols="2" rowHeight="100px">
+                <mat-grid-tile *ngFor="let prio of priority">
+                  <mat-form-field class="sm-width">
+                    <mat-label>{{ prio }}</mat-label>
+                    <input
+                      id="{{ task.acronym }}-{{ prio }}-{{
+                        convertDateToLocaleString(date)
+                      }}"
+                      type="number"
+                      matInput
+                      maxlength="1"
+                      placeholder="0"
+                    /> </mat-form-field
+                ></mat-grid-tile>
+              </mat-grid-list>
+            </div>
           </td>
         </tr>
-        <tr class="CA">
-          <th>Cases</th>
-          <td>
-            <table cellspacing="0" class="prio">
-              <tr>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P1</mat-label>
-                    <input
-                      id="CA-P1-09252023"
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P2</mat-label>
-                    <input
-                      id="CA-P2-09252023"
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P3</mat-label>
-                    <input
-                      id="CA-P3-09252023"
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P4</mat-label>
-                    <input
-                      id="CA-P4-09252023"
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-              </tr>
-            </table>
-          </td>
-          <td>
-            <table cellspacing="0" class="prio">
-              <tr>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P1</mat-label>
-                    <input
-                      id="CA-P1-09262023"
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P2</mat-label>
-                    <input
-                      id="CA-P2-09262023"
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P3</mat-label>
-                    <input
-                      id="CA-P3-09262023"
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P4</mat-label>
-                    <input
-                      id="CA-P4-09262023"
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-              </tr>
-            </table>
-          </td>
-          <td>
-            <table cellspacing="0" class="prio">
-              <tr>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P1</mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P2</mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P3</mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P4</mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-              </tr>
-            </table>
-          </td>
-          <td>
-            <table cellspacing="0" class="prio">
-              <tr>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P1</mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P2</mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P3</mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P4</mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-              </tr>
-            </table>
-          </td>
-          <td>
-            <table cellspacing="0" class="prio">
-              <tr>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P1</mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P2</mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P3</mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-                <td>
-                  <mat-form-field class="example-sm-width">
-                    <mat-label>P4</mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    />
-                  </mat-form-field>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr class="QL">
-          <th>Quality</th>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-        </tr>
-        <tr class="DC">
-          <th>Documentation</th>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-        </tr>
-        <tr class="CM">
-          <th>Client Meeting</th>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-        </tr>
-        <tr class="IM">
-          <th>Internal Meeting</th>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-        </tr>
-        <tr class="BR">
-          <th>Break</th>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" readonly value="1"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" readonly value="1"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" readonly value="1"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" readonly value="1"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" readonly value="1"
-            /></mat-form-field>
-          </td>
-        </tr>
-        <tr class="HL">
-          <th>Holiday</th>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-        </tr>
-        <tr class="TO">
-          <th>Time-off (VL/SL/EL)</th>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-        </tr>
-        <tr class="AT">
-          <th>Accenture Training</th>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-        </tr>
-        <tr class="AD">
-          <th>Admin</th>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-        </tr>
-        <tr class="DV">
-          <th>Development</th>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-md-width">
-              <mat-label>Hrs</mat-label>
-              <input type="number" matInput maxlength="1" placeholder="0"
-            /></mat-form-field>
-          </td>
-        </tr>
+
         <tr class="Total">
           <th>Total(hrs)</th>
           <td>
-            <mat-form-field class="example-md-width">
+            <mat-form-field class="md-width">
               <mat-label>Hrs</mat-label>
               <input type="number" matInput maxlength="1" placeholder="0"
             /></mat-form-field>
           </td>
           <td>
-            <mat-form-field class="example-md-width">
+            <mat-form-field class="md-width">
               <mat-label>Hrs</mat-label>
               <input type="number" matInput maxlength="1" placeholder="0"
             /></mat-form-field>
           </td>
           <td>
-            <mat-form-field class="example-md-width">
+            <mat-form-field class="md-width">
               <mat-label>Hrs</mat-label>
               <input type="number" matInput maxlength="1" placeholder="0"
             /></mat-form-field>
           </td>
           <td>
-            <mat-form-field class="example-md-width">
+            <mat-form-field class="md-width">
               <mat-label>Hrs</mat-label>
               <input type="number" matInput maxlength="1" placeholder="0"
             /></mat-form-field>
           </td>
           <td>
-            <mat-form-field class="example-md-width">
+            <mat-form-field class="md-width">
               <mat-label>Hrs</mat-label>
               <input type="number" matInput maxlength="1" placeholder="0"
             /></mat-form-field>
