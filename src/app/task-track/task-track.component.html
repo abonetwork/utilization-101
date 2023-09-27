@@ -5,7 +5,12 @@
 <mat-card class="week-view">
   <!-- Navigation-->
   <header class="meta">
-    <button mat-flat-button color="accent">
+    <button
+      type="button"
+      (click)="setSelectedDate('previousWeek')"
+      mat-flat-button
+      color="accent"
+    >
       <mat-icon
         aria-hidden="false"
         aria-label="navigate back"
@@ -23,7 +28,12 @@
       ></strong
     >
     <!-- <a class="next" href="#next">Week 37 &gt;</a> -->
-    <button mat-flat-button color="accent">
+    <button
+      type="button"
+      (click)="setSelectedDate('nextWeek')"
+      mat-flat-button
+      color="accent"
+    >
       Week {{ nextWeekNumber }}
       <mat-icon
         iconPositionEnd

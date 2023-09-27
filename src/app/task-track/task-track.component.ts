@@ -6,9 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./task-track.component.scss'],
 })
 export class TaskTrackComponent {
-  currentWeekNumber: number;
-  previousWeekNumber: number;
-  nextWeekNumber: number;
+  currentWeekNumber: number = 0;
+  previousWeekNumber: number = 0;
+  nextWeekNumber: number = 0;
+  selectedDate: Date;
   weekDates: Date[] = [];
   currentDate: Date = new Date();
   workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -32,19 +33,29 @@ export class TaskTrackComponent {
     // Get today's date
     const today = new Date();
     const currentDay = today.getDay(); // Get the current day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+    this.selectedDate = today;
+    this.generateWeekDates();
+  }
 
+  generateWeekDates() {
+    const selectedDate = new Date(this.selectedDate);
     // Calculate the week numbers
-    this.currentWeekNumber = this.getWeekNumber(today);
-    const previousWeekDate = new Date(today);
-    previousWeekDate.setDate(today.getDate() - 7); // Go back 7 days to get the previous week
+    this.currentWeekNumber = this.getWeekNumber(selectedDate);
+
+    const previousWeekDate = new Date(selectedDate);
+    previousWeekDate.setDate(selectedDate.getDate() - 7); // Go back 7 days to get the previous week
     this.previousWeekNumber = this.getWeekNumber(previousWeekDate);
-    const nextWeekDate = new Date(today);
-    nextWeekDate.setDate(today.getDate() + 7); // Go forward 7 days to get the next week
+    const nextWeekDate = new Date(selectedDate);
+    nextWeekDate.setDate(selectedDate.getDate() + 7); // Go forward 7 days to get the next week
     this.nextWeekNumber = this.getWeekNumber(nextWeekDate);
 
     // Calculate the date of the Monday of the current week
-    const monday = new Date(today);
-    monday.setDate(today.getDate() - currentDay + (currentDay === 0 ? -6 : 1));
+    const monday = new Date(selectedDate);
+    monday.setDate(
+      selectedDate.getDate() -
+        selectedDate.getDay() +
+        (selectedDate.getDay() === 0 ? -6 : 1)
+    );
 
     // Create an array of dates from Monday to Friday
     for (let i = 0; i < 5; i++) {
@@ -103,6 +114,32 @@ export class TaskTrackComponent {
 
   convertDateToLocaleString(date: Date): string {
     return date.toLocaleDateString();
+  }
+
+  setSelectedDate(selectedWeek: string) {
+    let dateSelected: Date = new Date('01/01/2000');
+
+    if (selectedWeek == 'previousWeek') {
+      dateSelected = this.getDateOfWeek(
+        this.previousWeekNumber,
+        this.selectedDate.getFullYear()
+      );
+    } else if (selectedWeek == 'nextWeek') {
+      dateSelected = this.getDateOfWeek(
+        this.nextWeekNumber,
+        this.selectedDate.getFullYear()
+      );
+    }
+    this.selectedDate = new Date(dateSelected);
+
+    this.weekDates = [];
+    this.generateWeekDates();
+  }
+
+  getDateOfWeek(week: number, year: number): Date {
+    const januaryFirst = new Date(year, 0, 1);
+    const daysToAdd = (week - 1) * 7 + (1 - januaryFirst.getDay()); // 1 is for Monday
+    return new Date(year, 0, 1 + daysToAdd);
   }
 }
 
