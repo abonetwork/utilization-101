@@ -1,17 +1,174 @@
-<div class="week-dates">
-  <button (click)="prevWeek()">
-    Previous Week ({{ getCurrentWeekNumber(currentDate) - 1 }})
-  </button>
-  <button (click)="nextWeek()">
-    Next Week ({{ getCurrentWeekNumber(currentDate) + 1 }})
-  </button>
 
-  <ul>
-    <li
-      *ngFor="let date of weekDates"
-      [class.current-date]="isCurrentDate(date)"
+
+<header class="header">
+  <strong>{{ formatDateWithOrdinals(currentDate) }}</strong
+  ><span>Lito Abon Jr — <a class="logout">Logout</a></span>
+</header>
+<mat-card class="week-view">
+  <!-- Navigation-->
+  <header class="meta">
+    <button type="button" (click)="prevWeek()" mat-flat-button color="accent">
+      <mat-icon
+        aria-hidden="false"
+        aria-label="navigate back"
+        fontIcon="navigate_before"
+      ></mat-icon>
+      Week ({{ getCurrentWeekNumber(currentDate) - 1 }})
+    </button>
+    <!-- <a class="prev" href="#previous">&lt; Week 35</a
+    > -->
+    <strong class="week">
+      <ng-container
+        *ngIf="
+          getDateConditional(weekDates[0]) < getDateConditional(weekDates[4]);
+          else elseBlock
+        "
+      >
+        {{ formatDayWithOrdinals(weekDates[0]) }} -
+        {{ formatDayWithOrdinals(weekDates[4]) }}
+        {{ weekDates[0] | date: 'MMMM' }}
+        {{ weekDates[4].getFullYear() }}
+      </ng-container>
+      <ng-template #elseBlock>
+        <ng-container
+          *ngIf="
+            getDateConditional(weekDates[0]) > getDateConditional(weekDates[4])
+          "
+        >
+          {{ formatDayWithOrdinals(weekDates[0]) }}
+          {{ weekDates[0] | date: 'MMMM' }} -
+          {{ formatDayWithOrdinals(weekDates[4]) }}
+          {{ weekDates[4] | date: 'MMMM' }}
+          {{ weekDates[4].getFullYear() }}
+        </ng-container>
+      </ng-template>
+
+      <small>Team Tracker</small></strong
     >
-      {{ date.toDateString() }}
-    </li>
-  </ul>
-</div>
+    <!-- <a class="next" href="#next">Week 37 &gt;</a> -->
+    <button type="button" (click)="nextWeek()" mat-flat-button color="accent">
+      Week ({{ getCurrentWeekNumber(currentDate) + 1 }})
+      <mat-icon
+        iconPositionEnd
+        aria-hidden="false"
+        aria-label="navigate next"
+        fontIcon="navigate_next"
+      ></mat-icon>
+    </button>
+  </header>
+  <!-- Main table-->
+  <main>
+    <table class="main">
+      <thead>
+        <tr>
+          <th class="day"></th>
+          <th
+            class="day"
+            *ngFor="let date of weekDates; index as i"
+            [ngClass]="{}"
+          >
+            {{ workingDays[i] }}<small>{{ formatDayWithOrdinals(date) }}</small>
+          </th>
+        </tr>
+        <!-- Buttons that help do things-->
+      </thead>
+      <tfoot>
+        <tr>
+          <th colspan="4">
+            <a class="view-all" href="#view"></a
+            ><a class="view-all" href="#print"></a>
+          </th>
+          <th class="summary" colspan="4">
+            <!-- <button mat-raised-button color="primary">Save</button> -->
+            <button type="submit" mat-fab extended color="primary">
+              <mat-icon>save</mat-icon>
+              Save
+            </button>
+          </th>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr *ngFor="let task of tasks" class="{{ task.acronym }}">
+          <th>{{ task.title }}</th>
+          <td *ngFor="let date of weekDates">
+            <mat-form-field *ngIf="task.acronym != 'CA'" class="md-width">
+              <mat-label>Hrs</mat-label>
+              <input
+                id="{{ task.acronym }}-{{ convertDateToLocaleString(date) }}"
+                type="number"
+                matInput
+                max="9"
+                placeholder="0"
+            /></mat-form-field>
+
+            <div *ngIf="task.acronym == 'CA'">
+              <mat-grid-list cols="2" rowHeight="80px">
+                <mat-grid-tile *ngFor="let prio of priority">
+                  <mat-form-field class="sm-width">
+                    <mat-label>{{ prio }}</mat-label>
+                    <input
+                      id="{{ task.acronym }}-{{ prio }}-{{
+                        convertDateToLocaleString(date)
+                      }}"
+                      type="number"
+                      matInput
+                      maxlength="1"
+                      placeholder="0"
+                    /> </mat-form-field
+                ></mat-grid-tile>
+              </mat-grid-list>
+            </div>
+          </td>
+        </tr>
+
+        <tr class="Total">
+          <th>Total(hrs)</th>
+          <td>
+            <mat-form-field class="md-width">
+              <mat-label>Hrs</mat-label>
+              <input type="number" matInput maxlength="1" placeholder="0"
+            /></mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="md-width">
+              <mat-label>Hrs</mat-label>
+              <input type="number" matInput maxlength="1" placeholder="0"
+            /></mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="md-width">
+              <mat-label>Hrs</mat-label>
+              <input type="number" matInput maxlength="1" placeholder="0"
+            /></mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="md-width">
+              <mat-label>Hrs</mat-label>
+              <input type="number" matInput maxlength="1" placeholder="0"
+            /></mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="md-width">
+              <mat-label>Hrs</mat-label>
+              <input type="number" matInput maxlength="1" placeholder="0"
+            /></mat-form-field>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+  <footer class="footer">
+    <!-- Only total hours--><strong class="hours-this-week"
+      >No. of hrs tasked this week
+      <span class="hours-worked"
+        ><mat-chip color="accent"> 50 hrs </mat-chip></span
+      ></strong
+    >
+    <!-- Only overtime--><strong class="overtime-this-week"
+      >Missing hrs this week:
+      <span class="overtime-worked"
+        ><mat-chip color="warn"> 0 hrs </mat-chip></span
+      ></strong
+    >
+  </footer>
+</mat-card>

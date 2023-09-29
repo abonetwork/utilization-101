@@ -11,9 +11,63 @@ import { addDays, addWeeks, startOfWeek, format } from 'date-fns';
 export class TaskTrackComponent {
   currentDate: Date = new Date();
   weekDates: Date[] = [];
+  workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  priority = ['P1', 'P2', 'P3', 'P4'];
+  tasks = [
+    { title: 'Client Training', acronym: 'CT' },
+    { title: 'Cases', acronym: 'CA' },
+    { title: 'Quality', acronym: 'QL' },
+    { title: 'Documentation', acronym: 'DC' },
+    { title: 'Client Meeting', acronym: 'CM' },
+    { title: 'Internal Meeting', acronym: 'IM' },
+    { title: 'Break', acronym: 'BR' },
+    { title: 'Holiday', acronym: 'HL' },
+    { title: 'Time-off', acronym: 'TO' },
+    { title: 'Accenture Training', acronym: 'AT' },
+    { title: 'Admin', acronym: 'AD' },
+    { title: 'Development', acronym: 'DV' },
+  ];
 
   constructor() {
     this.generateWeekDates(this.currentDate);
+  }
+
+  formatDateWithOrdinals(date: Date): string {
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getFullYear();
+
+    // Add the ordinal indicator to the day
+    const ordinalIndicator = this.getOrdinalIndicator(day);
+
+    return `${day}${ordinalIndicator} ${month} ${year}`;
+  }
+
+  getOrdinalIndicator(day: number): string {
+    if (day >= 11 && day <= 13) {
+      return 'th';
+    }
+    switch (day % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  }
+
+  getDateConditional(date: Date): number {
+    return date.getDate();
+  }
+
+  formatDayWithOrdinals(date: Date): string {
+    const day = date.getDate();
+    const ordinalIndicator = this.getOrdinalIndicator(day);
+
+    return `${day}${ordinalIndicator}`;
   }
 
   generateWeekDates(currentDate: Date) {
@@ -56,6 +110,10 @@ export class TaskTrackComponent {
       (today.valueOf() - firstDayOfYear.valueOf()) / 86400000 + 0.5
     );
     return Math.ceil((days + firstDayOfYear.getDay() + 1) / 7);
+  }
+
+  convertDateToLocaleString(date: Date): string {
+    return date.toLocaleDateString();
   }
 }
 

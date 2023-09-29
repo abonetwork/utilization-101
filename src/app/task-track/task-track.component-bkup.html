@@ -1,3 +1,21 @@
+<div class="week-dates">
+  <button (click)="prevWeek()">
+    Previous Week ({{ getCurrentWeekNumber(currentDate) - 1 }})
+  </button>
+  <button (click)="nextWeek()">
+    Next Week ({{ getCurrentWeekNumber(currentDate) + 1 }})
+  </button>
+
+  <ul>
+    <li
+      *ngFor="let date of weekDates"
+      [class.current-date]="isCurrentDate(date)"
+    >
+      {{ date.toDateString() }}
+    </li>
+  </ul>
+</div>
+
 <header class="header">
   <strong>{{ formatDateWithOrdinals(currentDate) }}</strong
   ><span>Lito Abon Jr — <a class="logout">Logout</a></span>
@@ -27,9 +45,8 @@
           else elseBlock
         "
       >
-        {{ formatDayWithOrdinals(weekDates[0]) }} -
-        {{ formatDayWithOrdinals(weekDates[4]) }}
-        {{ weekDates[0] | date: 'MMMM' }}
+        {{ formatDayWithOrdinals(weekDates[0]) }} - {{
+        formatDayWithOrdinals(weekDates[4]) }} {{ weekDates[0] | date: 'MMMM' }}
         {{ weekDates[4].getFullYear() }}
       </ng-container>
       <ng-template #elseBlock>
@@ -38,11 +55,9 @@
             getDateConditional(weekDates[0]) > getDateConditional(weekDates[4])
           "
         >
-          {{ formatDayWithOrdinals(weekDates[0]) }}
-          {{ weekDates[0] | date: 'MMMM' }} -
-          {{ formatDayWithOrdinals(weekDates[4]) }}
-          {{ weekDates[4] | date: 'MMMM' }}
-          {{ weekDates[4].getFullYear() }}
+          {{ formatDayWithOrdinals(weekDates[0]) }} {{ weekDates[0] | date:
+          'MMMM' }} - {{ formatDayWithOrdinals(weekDates[4]) }} {{ weekDates[4]
+          | date: 'MMMM' }} {{ weekDates[4].getFullYear() }}
         </ng-container>
       </ng-template>
 
