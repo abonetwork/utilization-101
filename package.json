@@ -25,6 +25,7 @@
     "@angular/router": "^16.1.0-rc.0",
     "@material/density": "^15.0.0-canary.bc9ae6c9c.0",
     "angular-in-memory-web-api": "~0.16.0",
+    "date-fns": "^2.30.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"

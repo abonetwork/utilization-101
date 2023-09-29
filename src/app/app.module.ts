@@ -17,8 +17,9 @@ import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
-
 import { MatGridListModule } from '@angular/material/grid-list';
+import { DatePipe } from '@angular/common';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -36,6 +37,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatGridListModule,
     RouterModule.forRoot([{ path: '', component: TaskTrackComponent }]),
   ],
+  providers: [DatePipe],
   declarations: [AppComponent, TopBarComponent, TaskTrackComponent],
   bootstrap: [AppComponent],
 })

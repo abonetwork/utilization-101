@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { DatePipe } from '@angular/common';
+
+import { addDays, addWeeks, startOfWeek, format } from 'date-fns';
 
 @Component({
   selector: 'app-task-track',
@@ -6,174 +9,53 @@ import { Component } from '@angular/core';
   styleUrls: ['./task-track.component.scss'],
 })
 export class TaskTrackComponent {
-  currentWeekNumber: number = 0;
-  previousWeekNumber: number = 0;
-  nextWeekNumber: number = 0;
-  selectedDate: Date;
-  weekDates: Date[] = [];
   currentDate: Date = new Date();
-  previousYear: number = 0;
-  nextYear: number = 0;
-  workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-  priority = ['P1', 'P2', 'P3', 'P4'];
-  tasks = [
-    { title: 'Client Training', acronym: 'CT' },
-    { title: 'Cases', acronym: 'CA' },
-    { title: 'Quality', acronym: 'QL' },
-    { title: 'Documentation', acronym: 'DC' },
-    { title: 'Client Meeting', acronym: 'CM' },
-    { title: 'Internal Meeting', acronym: 'IM' },
-    { title: 'Break', acronym: 'BR' },
-    { title: 'Holiday', acronym: 'HL' },
-    { title: 'Time-off', acronym: 'TO' },
-    { title: 'Accenture Training', acronym: 'AT' },
-    { title: 'Admin', acronym: 'AD' },
-    { title: 'Development', acronym: 'DV' },
-  ];
+  weekDates: Date[] = [];
 
   constructor() {
-    // Get today's date
-    const today = new Date();
-    const currentDay = today.getDay(); // Get the current day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-    this.selectedDate = today;
-    this.generateWeekDates();
+    this.generateWeekDates(this.currentDate);
   }
 
-  generateWeekDates() {
-    const selectedDate = new Date(this.selectedDate);
-    // Calculate the week numbers
-    this.currentWeekNumber = this.getWeekNumber(selectedDate);
+  generateWeekDates(currentDate: Date) {
+    const startOfWeek = new Date(currentDate);
+    startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 1);
 
-    const previousWeekDate = new Date(selectedDate);
-    previousWeekDate.setDate(selectedDate.getDate() - 7); // Go back 7 days to get the previous week
-    this.previousWeekNumber = this.getWeekNumber(previousWeekDate);
-    this.previousYear = previousWeekDate.getFullYear();
-
-    const nextWeekDate = new Date(selectedDate);
-    nextWeekDate.setDate(selectedDate.getDate() + 7); // Go forward 7 days to get the next week
-    this.nextWeekNumber = this.getWeekNumber(nextWeekDate);
-
-    this.nextYear = nextWeekDate.getFullYear();
-
-    console.log(this.previousYear, ',', this.nextYear);
-
-    // if (this.previousWeekNumber > this.nextWeekNumber) {
-    //   this.nextYear += 1;
-    // } else {
-    //   this.previousYear -= 1;
-    // }
-    // Calculate the date of the Monday of the current week
-    const monday = new Date(selectedDate);
-    monday.setDate(
-      selectedDate.getDate() -
-        selectedDate.getDay() +
-        (selectedDate.getDay() === 0 ? -6 : 1)
-    );
-
-    // Create an array of dates from Monday to Friday
-    for (let i = 0; i < 5; i++) {
-      this.weekDates.push(new Date(monday));
-      monday.setDate(monday.getDate() + 1);
-    }
-  }
-
-  getWeekNumber(date: Date): number {
-    // Copy date so don't modify original
-    date = new Date(
-      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
-    );
-    date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
-
-    // Get the year of the week's Thursday
-    const year = new Date(Date.UTC(date.getUTCFullYear(), 0, 4));
-
-    // Calculate the week number
-    return Math.ceil(((date.getTime() - year.getTime()) / 86400000 + 1) / 7);
-  }
-
-  formatDateWithOrdinals(date: Date): string {
-    const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'long' });
-    const year = date.getFullYear();
-
-    // Add the ordinal indicator to the day
-    const ordinalIndicator = this.getOrdinalIndicator(day);
-
-    return `${day}${ordinalIndicator} ${month} ${year}`;
-  }
-
-  formatDayWithOrdinals(date: Date): string {
-    const day = date.getDate();
-    const ordinalIndicator = this.getOrdinalIndicator(day);
-
-    return `${day}${ordinalIndicator}`;
-  }
-
-  getOrdinalIndicator(day: number): string {
-    if (day >= 11 && day <= 13) {
-      return 'th';
-    }
-    switch (day % 10) {
-      case 1:
-        return 'st';
-      case 2:
-        return 'nd';
-      case 3:
-        return 'rd';
-      default:
-        return 'th';
-    }
-  }
-
-  convertDateToLocaleString(date: Date): string {
-    return date.toLocaleDateString();
-  }
-
-  setSelectedDate(selectedWeek: string) {
-    let dateSelected: Date = new Date('01/01/2000');
-
-    if (selectedWeek == 'previousWeek') {
-      // if (this.previousYear > this.nextYear) {
-      dateSelected = this.getDateOfWeek(
-        this.previousWeekNumber,
-        this.previousYear
-      );
-      console.log(this.previousWeekNumber, this.previousYear);
-      // } else {
-      //   dateSelected = this.getDateOfWeek(
-      //     this.previousWeekNumber,
-      //     this.selectedDate.getFullYear()
-      //   );
-      // }
-    } else if (selectedWeek == 'nextWeek') {
-      // if (this.previousYear < this.nextYear) {
-      dateSelected = this.getDateOfWeek(this.nextWeekNumber, this.nextYear);
-      console.log(this.nextWeekNumber, this.nextYear);
-      // } else {
-      //   dateSelected = this.getDateOfWeek(
-      //     this.nextWeekNumber,
-      //     this.selectedDate.getFullYear()
-      //   );
-      // }
-    }
-    console.log(dateSelected);
-
-    this.selectedDate = new Date(dateSelected);
-    // console.log(this.selectedDate);
     this.weekDates = [];
-    // this.previousYear = 0;
-    // this.nextYear = 0;
-    this.generateWeekDates();
+
+    for (let i = 0; i < 5; i++) {
+      // Loop for 5 days (Monday to Friday)
+      const date = new Date(startOfWeek);
+      date.setDate(startOfWeek.getDate() + i);
+      this.weekDates.push(date);
+    }
   }
 
-  getDateOfWeek(week: number, year: number): Date {
-    const januaryFirst = new Date(year, 0, 1);
-    const daysToAdd = (week - 1) * 7 + (1 - januaryFirst.getDay()); // 1 is for Monday
-    return new Date(year, 0, 1 + daysToAdd);
+  prevWeek() {
+    this.currentDate.setDate(this.currentDate.getDate() - 7);
+    this.generateWeekDates(this.currentDate);
   }
 
-  getDateConditional(date: Date): number {
-    return date.getDate();
+  nextWeek() {
+    this.currentDate.setDate(this.currentDate.getDate() + 7);
+    this.generateWeekDates(this.currentDate);
+  }
+
+  isCurrentDate(date: Date): boolean {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  }
+
+  getCurrentWeekNumber(currentDate: Date): number {
+    const today = currentDate;
+    const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
+    const days = Math.round(
+      (today.valueOf() - firstDayOfYear.valueOf()) / 86400000 + 0.5
+    );
+    return Math.ceil((days + firstDayOfYear.getDay() + 1) / 7);
   }
 }
 

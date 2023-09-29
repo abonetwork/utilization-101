@@ -227,3 +227,24 @@ tr > td,
 .prio {
   margin: 0 auto;
 }
+
+.current-date {
+  background-color: yellow; /* You can choose any highlighting style you prefer */
+  font-weight: bold;
+}
+
+
+.week-dates {
+  text-align: center;
+  margin-top: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
