@@ -57,6 +57,33 @@ export class TaskTrackComponent {
     );
     return Math.ceil((days + firstDayOfYear.getDay() + 1) / 7);
   }
+
+  formatDateWithOrdinals(date: Date): string {
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getFullYear();
+
+    // Add the ordinal indicator to the day
+    const ordinalIndicator = this.getOrdinalIndicator(day);
+
+    return `${day}${ordinalIndicator} ${month} ${year}`;
+  }
+
+  getOrdinalIndicator(day: number): string {
+    if (day >= 11 && day <= 13) {
+      return 'th';
+    }
+    switch (day % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  }
 }
 
 /*
