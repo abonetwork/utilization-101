@@ -1,7 +1,5 @@
-
-
 <header class="header">
-  <strong>{{ formatDateWithOrdinals(currentDate) }}</strong
+  <strong>{{ formatDateWithOrdinals(todayDate) }}</strong
   ><span>Lito Abon Jr — <a class="logout">Logout</a></span>
 </header>
 <mat-card class="week-view">
@@ -13,7 +11,7 @@
         aria-label="navigate back"
         fontIcon="navigate_before"
       ></mat-icon>
-      Week ({{ getCurrentWeekNumber(currentDate) - 1 }})
+      Week {{ getCurrentWeekNumber(currentDate) - 1 }}
     </button>
     <!-- <a class="prev" href="#previous">&lt; Week 35</a
     > -->
@@ -47,7 +45,7 @@
     >
     <!-- <a class="next" href="#next">Week 37 &gt;</a> -->
     <button type="button" (click)="nextWeek()" mat-flat-button color="accent">
-      Week ({{ getCurrentWeekNumber(currentDate) + 1 }})
+      Week {{ getCurrentWeekNumber(currentDate) + 1 }}
       <mat-icon
         iconPositionEnd
         aria-hidden="false"
@@ -65,9 +63,14 @@
           <th
             class="day"
             *ngFor="let date of weekDates; index as i"
-            [ngClass]="{}"
+            [class.current-date]="isCurrentDate(date)"
           >
-            {{ workingDays[i] }}<small>{{ formatDayWithOrdinals(date) }}</small>
+            <div class="Cell-dayView">
+              <p class="Cell-dayOfWeek">{{ weekDays[i] }}</p>
+              <div class="Cell-dayOfMonth">
+                {{ date | date: 'dd' }}
+              </div>
+            </div>
           </th>
         </tr>
         <!-- Buttons that help do things-->
@@ -89,9 +92,13 @@
       </tfoot>
       <tbody>
         <tr *ngFor="let task of tasks" class="{{ task.acronym }}">
-          <th>{{ task.title }}</th>
-          <td *ngFor="let date of weekDates">
-            <mat-form-field *ngIf="task.acronym != 'CA'" class="md-width">
+          <th class="task-title">{{ task.title }}</th>
+          <td *ngFor="let date of weekDates; index as i">
+            <mat-form-field
+              appearance="outline"
+              *ngIf="task.acronym != 'CA' && i > 0 && i < 6"
+              class="md-width"
+            >
               <mat-label>Hrs</mat-label>
               <input
                 id="{{ task.acronym }}-{{ convertDateToLocaleString(date) }}"
@@ -101,58 +108,73 @@
                 placeholder="0"
             /></mat-form-field>
 
-            <div *ngIf="task.acronym == 'CA'">
-              <mat-grid-list cols="2" rowHeight="80px">
-                <mat-grid-tile *ngFor="let prio of priority">
-                  <mat-form-field class="sm-width">
-                    <mat-label>{{ prio }}</mat-label>
-                    <input
-                      id="{{ task.acronym }}-{{ prio }}-{{
-                        convertDateToLocaleString(date)
-                      }}"
-                      type="number"
-                      matInput
-                      maxlength="1"
-                      placeholder="0"
-                    /> </mat-form-field
-                ></mat-grid-tile>
-              </mat-grid-list>
+            <div *ngIf="task.acronym == 'CA' && i > 0 && i < 6">
+              <!-- <mat-grid-list cols="2" rowHeight="2:2"> -->
+
+              <table cellspacing="0" class="prio">
+                <tr>
+                  <td>
+                    <!-- <mat-grid-tile > -->
+                    <mat-form-field
+                      *ngFor="let prio of priority"
+                      appearance="outline"
+                      class="sm-width"
+                    >
+                      <mat-label>{{ prio }}</mat-label>
+                      <input
+                        id="{{ task.acronym }}-{{ prio }}-{{
+                          convertDateToLocaleString(date)
+                        }}"
+                        type="number"
+                        matInput
+                        maxlength="1"
+                        placeholder="0"
+                      />
+                    </mat-form-field>
+                    <!-- </mat-grid-tile> -->
+                  </td>
+                </tr>
+              </table>
+
+              <!-- </mat-grid-list> -->
             </div>
           </td>
         </tr>
 
         <tr class="Total">
           <th>Total(hrs)</th>
+          <td></td>
           <td>
-            <mat-form-field class="md-width">
+            <mat-form-field appearance="outline" class="md-width">
               <mat-label>Hrs</mat-label>
               <input type="number" matInput maxlength="1" placeholder="0"
             /></mat-form-field>
           </td>
           <td>
-            <mat-form-field class="md-width">
+            <mat-form-field appearance="outline" class="md-width">
               <mat-label>Hrs</mat-label>
               <input type="number" matInput maxlength="1" placeholder="0"
             /></mat-form-field>
           </td>
           <td>
-            <mat-form-field class="md-width">
+            <mat-form-field appearance="outline" class="md-width">
               <mat-label>Hrs</mat-label>
               <input type="number" matInput maxlength="1" placeholder="0"
             /></mat-form-field>
           </td>
           <td>
-            <mat-form-field class="md-width">
+            <mat-form-field appearance="outline" class="md-width">
               <mat-label>Hrs</mat-label>
               <input type="number" matInput maxlength="1" placeholder="0"
             /></mat-form-field>
           </td>
           <td>
-            <mat-form-field class="md-width">
+            <mat-form-field appearance="outline" class="md-width">
               <mat-label>Hrs</mat-label>
               <input type="number" matInput maxlength="1" placeholder="0"
             /></mat-form-field>
           </td>
+          <td></td>
         </tr>
       </tbody>
     </table>

@@ -20,7 +20,7 @@ table {
 }
 
 table > tbody > tr:nth-of-type(odd) {
-  background-color: rgba(244, 244, 244, 0.326);
+  background-color: rgba(244, 244, 244, 0.518);
 }
 
 header.header {
@@ -28,7 +28,7 @@ header.header {
   display: grid;
   grid-template-columns: 1fr 1fr;
   max-width: 80rem;
-  margin: 0 auto 1rem;
+  margin: 11px auto 1rem;
   font-family: unquote('Roboto');
   font-size: 96;
 
@@ -106,6 +106,9 @@ header.meta {
   }
 }
 
+th {
+  padding: 10px;
+}
 th.cutoff {
   background-color: $shadow;
   color: white;
@@ -216,7 +219,7 @@ footer strong {
   // margin: -40px;
 }
 .md-width {
-  width: 180px;
+  width: 150px;
   margin-bottom: -10px;
 }
 
@@ -228,11 +231,35 @@ tr > td,
   margin: 0 auto;
 }
 
-.current-date {
-  background-color: yellow; /* You can choose any highlighting style you prefer */
-  font-weight: bold;
+.task-title {
+  font-weight: 400;
+  font-size: 0.85rem;
+  line-height: 1.17;
+  letter-spacing: 0.03333em;
+  margin: 0px;
 }
 
+.Cell-dayOfWeek {
+  font-weight: 400;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  letter-spacing: 0.03333em;
+  margin: 0px;
+}
+
+.Cell-dayOfMonth {
+  font-weight: 400;
+  font-size: 1.8rem;
+  line-height: 1.2;
+  letter-spacing: 0.00735em;
+  // color: rgba(0, 0, 0, 0.6);
+}
+
+th.current-date {
+  background-color: $shadow;
+  color: white;
+  font-weight: bold;
+}
 
 .week-dates {
   text-align: center;

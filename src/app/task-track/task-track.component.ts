@@ -10,8 +10,17 @@ import { addDays, addWeeks, startOfWeek, format } from 'date-fns';
 })
 export class TaskTrackComponent {
   currentDate: Date = new Date();
+  todayDate: Date = new Date();
   weekDates: Date[] = [];
-  workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  weekDays = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
   priority = ['P1', 'P2', 'P3', 'P4'];
   tasks = [
     { title: 'Client Training', acronym: 'CT' },
@@ -72,12 +81,12 @@ export class TaskTrackComponent {
 
   generateWeekDates(currentDate: Date) {
     const startOfWeek = new Date(currentDate);
-    startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 1);
+    startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 0); // Start on Sunday
 
     this.weekDates = [];
 
-    for (let i = 0; i < 5; i++) {
-      // Loop for 5 days (Monday to Friday)
+    for (let i = 0; i < 7; i++) {
+      // Loop for 7 days (Sunday to Saturday)
       const date = new Date(startOfWeek);
       date.setDate(startOfWeek.getDate() + i);
       this.weekDates.push(date);
